@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2023 at 07:32 PM
+-- Generation Time: Feb 17, 2023 at 01:41 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.27
 
@@ -53,6 +53,13 @@ CREATE TABLE `m_c_q_s` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `m_c_q_s`
+--
+
+INSERT INTO `m_c_q_s` (`id`, `quiz_id`, `question`, `option_a`, `option_b`, `option_c`, `option_d`, `answer`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Q1', 'asa', 'sasa', 'sasasd', 'fdfd', 'a', '2023-02-17 07:29:14', '2023-02-17 07:29:14', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -73,7 +80,8 @@ CREATE TABLE `quiz_descriptions` (
 --
 
 INSERT INTO `quiz_descriptions` (`id`, `title`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'ABC', 'DEF', '2023-02-16 17:35:08', NULL, NULL);
+(1, 'Abcd', 'Efg', '2023-02-17 12:28:41', NULL, NULL),
+(2, 'asa', 'sasaq', '2023-02-17 12:37:21', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -112,13 +120,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `m_c_q_s`
 --
 ALTER TABLE `m_c_q_s`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `quiz_descriptions`
 --
 ALTER TABLE `quiz_descriptions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

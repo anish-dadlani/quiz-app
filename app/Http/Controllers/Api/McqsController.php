@@ -7,16 +7,11 @@ use App\Models\MCQS;
 use App\Http\Requests\StoreMcqsRequest;
 use App\Http\Resources\McqsResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class McqsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+    public function index() {
         try {
             $mcqs = MCQS::all();
             $response = [
@@ -35,27 +30,19 @@ class McqsController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    public function create() {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         try {
             $MCQS = MCQS::create($request->all());
-            return new MCQSResource($MCQS);
+            $response = [
+                'success' => true,
+                'errors' => null,
+                'data' => new MCQSResource($MCQS),
+            ];
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
@@ -66,40 +53,14 @@ class McqsController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Mcqs  $mcqs
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Mcqs $mcqs)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Mcqs  $mcqs
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Mcqs $mcqs)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Mcqs  $mcqs
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Mcqs $mcqs)
-    {
+    public function show($id) {
         try {
-            $MCQS = MCQS::create($request->all());
-            return new MCQSResource($MCQS);
+            $mcqs = DB::table('m_c_q_s')->where('id', $id)->first();
+            return response()->json([
+                'success' => true,
+                'errors' => null,
+                'data' => $mcqs
+            ], 200);
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
@@ -110,22 +71,56 @@ class McqsController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Mcqs  $mcqs
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Mcqs $mcqs)
-    {
+    public function edit(Mcqs $mcqs) {
+        //
+    }
+
+    public function update(Request $request, $id) {
         try {
-            $MCQS->delete();
-            return response(null, 204);
+            if (!$request) {
+                throw new \Exception("Request is empty.");
+            }
+
+            $data['quiz_id'] = $request->quiz_id;
+            $data['question'] = $request->question;
+            $data['option_a'] = $request->option_a;
+            $data['option_b'] = $request->option_b;
+            $data['option_c'] = $request->option_c;
+            $data['option_d'] = $request->option_d;
+            $data['answer'] = $request->answer;
+            $data['updated_at'] = now();
+
+            $mcqs = DB::table('m_c_q_s')->where('id', $id)->update($data) == 1 ? "Record Updated Successfully" : "Something Went Wrond";
+            
+            $response = [
+                'success' => true,
+                'errors' => null,
+                'data' => $mcqs,
+            ];
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
                 'errors' => [$e->getMessage()],
-                'data' => null,
+                'data' => null
+            ];
+            return response()->json($response, 500);
+        }
+    }
+
+    public function destroy($id) {
+        try {
+            $response = [
+                'success' => true,
+                'errors' => null,
+                'data' => DB::table('m_c_q_s')->where('id', $id)->delete() == 1 ? "Record Deleted" : "Something Went Wrong",
+            ];
+            return response($response, 200);
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'errors' => [$e->getMessage()],
+                'data' => null
             ];
             return response()->json($response, 500);
         }

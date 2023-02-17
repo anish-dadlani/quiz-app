@@ -1,0 +1,30 @@
+Quiz API Links
+
+1 - Add Quiz (Title, Description)
+	POST : http://127.0.0.1:8000/api/quizzes
+	*fields in form body
+2 - Update Quiz
+	PUT : http://127.0.0.1:8000/api/quizzes/{id}
+	*fields in form body
+3 - Delete Quiz
+	DELETE : http://127.0.0.1:8000/api/quizzes/{id}
+4 - Retrieve Quiz
+	GET : http://127.0.0.1:8000/api/quizzes/{id}
+5 - Retrieve All Quizzes
+	GET : http://127.0.0.1:8000/api/quizzes
+
+
+MCQS API Links
+
+1 - Add MCQs
+	POST : http://127.0.0.1:8000/api/mcqs
+	*fields in form body
+2 - Update MCQs
+	PUT : http://127.0.0.1:8000/api/mcqs/{id}
+	*fields in form body
+3 - Delete MCQs
+	DELETE : http://127.0.0.1:8000/api/mcqs/{id}
+4 - Retrieve MCQs
+	GET : http://127.0.0.1:8000/api/mcqs/{id}
+5 - Retrieve All MCQs
+	GET : http://127.0.0.1:8000/api/mcqs

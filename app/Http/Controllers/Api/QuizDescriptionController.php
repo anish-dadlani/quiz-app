@@ -7,54 +7,89 @@ use App\Http\Requests\StoreQuizDescriptionRequest;
 use App\Http\Resources\QuizDescriptionResource;
 use App\Models\QuizDescription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class QuizDescriptionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+    public function index() {
         try {
             $quizDescription = QuizDescription::all();
             $response = [
                 'success' => true,
+                'errors' => null,
                 'data' => $quizDescription
             ];
-            // return QuizDescriptionResource::collection($response);
-            return response()->json($response, 500);
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
-                'errors' => [$e->getMessage()]
+                'errors' => [$e->getMessage()],
+                'data' => null,
             ];
             return response()->json($response, 500);
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    public function create() {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         try {
             $quizDescription = QuizDescription::create($request->all());
-            return new QuizDescriptionResource($quizDescription);
+            $response = [
+                'success' => true,
+                'errors' => null,
+                'data' => new QuizDescriptionResource($quizDescription),
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'errors' => [$e->getMessage()],
+                'data' => []
+            ];
+            return response()->json($response, 500);
+        }
+    }
+
+    public function show($id) {
+        try {
+            $quizDescription = DB::table('quiz_descriptions')->where('id', $id)->first();
+            return response()->json([
+                'success' => true,
+                'errors' => null,
+                'data' => $quizDescription
+            ], 200);
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'errors' => [$e->getMessage()],
+                'data' => null,
+            ];
+            return response()->json($response, 500);
+        }
+    }
+
+    public function edit(QuizDescription $quizDescription) {
+        //
+    }
+
+    public function update(Request $request, $id) {
+        try {
+            if (!$request) {
+                throw new \Exception("Request is empty.");
+            }
+            $data['title'] = $request->title;
+            $data['description'] = $request->description;
+            $data['updated_at'] = now();
+            $quizDescription = DB::table('quiz_descriptions')->where('id', $id)->update($data) == 1 ? "Record Updated Successfully" : "Something Went Wrond";
+            $response = [
+                'success' => true,
+                'errors' => null,
+                'data' => $quizDescription,
+            ];
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
@@ -64,64 +99,19 @@ class QuizDescriptionController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\QuizDescription  $QuizDescription
-     * @return \Illuminate\Http\Response
-     */
-    public function show(QuizDescription $quizDescription)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\QuizDescription  $QuizDescription
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(QuizDescription $quizDescription)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\QuizDescription  $QuizDescription
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, QuizDescription $quizDescription)
-    {
+    public function destroy($id) {
         try {
-            $quizDescription = QuizDescription::create($request->all());
-            return new QuizDescriptionResource($quizDescription);
-        } catch (\Exception $e) {
             $response = [
-                'success' => false,
-                'errors' => [$e->getMessage()]
+                'success' => true,
+                'errors' => null,
+                'data' => DB::table('quiz_descriptions')->where('id', $id)->delete() == 1 ? "Record Deleted" : "Something Went Wrong",
             ];
-            return response()->json($response, 500);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\QuizDescription  $QuizDescription
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(QuizDescription $quizDescription)
-    {
-        try {
-            $quizDescription->delete();
-            return response(null, 204);
+            return response($response, 200);
         } catch (\Exception $e) {
             $response = [
                 'success' => false,
-                'errors' => [$e->getMessage()]
+                'errors' => [$e->getMessage()],
+                'data' => null
             ];
             return response()->json($response, 500);
         }

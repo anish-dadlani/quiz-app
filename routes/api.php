@@ -18,5 +18,5 @@ use App\Http\Controllers\Api\McqsController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::apiResource('quizzes',QuizDescriptionController::class);
-Route::apiResource('mcqs',McqsController::class);
+Route::apiResource('quizzes', QuizDescriptionController::class);
+Route::apiResource('mcqs', McqsController::class);
